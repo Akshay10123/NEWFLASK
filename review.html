@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Review Your Information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Review Your Information</h1>
+
+    <h2>Product Information</h2>
+    <ul>
+        <li><strong>Product Name:</strong> {{ data['product_name'] }}</li>
+        <li><strong>Version:</strong> {{ data['version'] }}</li>
+        <li><strong>Launch Date:</strong> {{ data['launch_date'] }}</li>
+        <li><strong>Retirement Date:</strong> {{ data['retirement_date'] }}</li>
+        <li><strong>Decision Making:</strong> {{ data['decision_making'] }}</li>
+        <li><strong>Monetization:</strong> {{ data['monetization'] }}</li>
+        <li><strong>Time Savings:</strong> {{ data['time_savings'] }}</li>
+        <li><strong>Reporting:</strong> {{ data['reporting'] }}</li>
+        <li><strong>Processes:</strong> {{ data['processes'] }}</li>
+        <li><strong>Collaboration:</strong> {{ data['collaboration'] }}</li>
+        <li><strong>Documentation Audits:</strong> {{ data['documentation_audits'] }}</li>
+    </ul>
+
+    <h2>Product Owner(s) Information</h2>
+    <ul>
+        {% for owner in data['product_owners'] %}
+            <li>
+                <strong>Product Owner Name:</strong> {{ owner.name }} <br>
+                <strong>ZID:</strong> {{ owner.zid }} <br>
+                <strong>Email:</strong> {{ owner.email }} <br>
+                <strong>Type:</strong> {{ owner.type }} <br>
+                <strong>Valid From Date:</strong> {{ owner.valid_from }}
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+
+    <h2>Nucleus Data</h2>
+    <ul>{{ 'Has data' if data.get('nucleus_data') else 'No data' }}</ul>
+    
+    <h2>Other Data</h2>
+    <ul>{{ 'Has data' if data.get('other_data') else 'No data' }}</ul>
+    
+    <h2>Platform Information</h2>
+    <ul>Name: {{ data.get('platform_name', 'N/A') }}
+        Version: {{ data.get('platform_version', 'N/A') }}
+    </ul>
+
+    <div>
+        <input type="button" value="Edit" onclick="window.history.back();">
+        <input type="submit" value="Submit All Data" onclick="submitData();">
+    </div>
+</body>
+</html>

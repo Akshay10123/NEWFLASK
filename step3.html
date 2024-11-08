@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nucleus Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Does the product have data in Nucleus?</h1>
+    <form method="post">
+        <div>
+            <input type="checkbox" id="nucleus_data" name="nucleus_data">
+            <label for="nucleus_data">Yes, it has data in Nucleus.</label>
+        </div>
+        <div>
+            <input type="submit" value="Next">
+        </div>
+    </form>
+</body>
+</html>

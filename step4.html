@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Other Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Does the product have data in other than Nucleus?</h1>
+    <form method="post">
+        <div>
+            <input type="checkbox" id="other_data" name="other_data">
+            <label for="other_data">Yes, it has data other than Nucleus.</label>
+        </div>
+        <div>
+            <input type="submit" value="Next">
+        </div>
+    </form>
+</body>
+</html>

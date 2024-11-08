@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Platforms and Technologies</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>What platforms/technologies does the product use?</h1>
+    <form method="post">
+        <div>
+            <label for="platform_name">Platform Name:</label>
+            <input type="text" id="platform_name" name="platform_name">
+        </div>
+        <div>
+            <label for="platform_version">Platform Version:</label>
+            <input type="text" id="platform_version" name="platform_version">
+        </div>
+        <div>
+            <input type="submit" value="Next">
+        </div>
+    </form>
+</body>
+</html>

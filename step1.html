@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Product Information</h1>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div>
+            <label>{{ form.product_name.label }}:</label>
+            {{ form.product_name(size=50) }}
+        </div>
+        <div>
+            <label>{{ form.version.label }}:</label>
+            {{ form.version(size=50) }}
+        </div>
+        <div>
+            <label>{{ form.launch_date.label }}:</label>
+            {{ form.launch_date() }}
+        </div>
+        <div>
+            <label>{{ form.retirement_date.label }}:</label>
+            {{ form.retirement_date() }}
+        </div>
+        <h2>Business Value (0-10 scale)</h2>
+        <div>
+            <label>{{ form.decision_making.label }}:</label>
+            {{ form.decision_making(size=50) }}
+        </div>
+        <div>
+            <label>{{ form.monetization.label }}:</label>
+            {{ form.monetization(size=50) }}
+        </div>
+        <div>
+            <label>{{ form.time_savings.label }}:</label>
+            {{ form.time_savings(size=50) }}
+        </div>
+        <div>
+            <label>{{ form.reporting.label }}:</label>
+            {{ form.reporting(size=50) }}
+        </div>
+        <div>
+            <label>{{ form.processes.label }}:</label>
+            {{ form.processes(size=50) }}
+        </div>
+        <div>
+            <label>{{ form.collaboration.label }}:</label>
+            {{ form.collaboration(size=50) }}
+        </div>
+        <div>
+            <label>{{ form.documentation_audits.label }}:</label>
+            {{ form.documentation_audits(size=50) }}
+        </div>
+        <div>
+            <input type="submit" name="next" value="Next">
+        </div>
+    </form>
+</body>
+</html>
