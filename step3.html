@@ -1,20 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Nucleus Data</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Does the product have data in Nucleus?</h1>
-    <form method="post">
-        <div>
-            <input type="checkbox" id="nucleus_data" name="nucleus_data">
-            <label for="nucleus_data">Yes, it has data in Nucleus.</label>
-        </div>
-        <div>
-            <input type="submit" value="Next">
-        </div>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Business Owner Information</h1>
+        <form method="post">
+            <!-- Message when no business owners are added -->
+            <div id="message">
+                <p>No business owners added. Click <strong>+</strong> to add a business owner.</p>
+            </div>
+
+            <div id="contact-fields" class="contact-fields-container">
+                <!-- Initially, no fields are shown -->
+            </div>
+
+            <!-- Buttons to add/remove business owners -->
+            <div class="button-container">
+                <button type="button" onclick="addNewBusinessOwner()">+</button> <!-- Add New Business Owner -->
+                <button type="button" onclick="removeBusinessOwner()">-</button> <!-- Remove Last Business Owner -->
+            </div>
+
+            <!-- Hidden field to track the number of business owners -->
+            <input type="hidden" name="num_owners" id="num_owners" value="0">
+
+            <!-- Submit buttons for saving and skipping -->
+            <div class="form-actions">
+                <input type="submit" name="save" value="Save">
+                <input type="submit" name="skip" value="Skip">
+            </div>
+        </form>
+    </div>
+    <script>
+        let ownerCount = 0;  // No owners initially
+
+        // Function to add a new business owner field
+        function addNewBusinessOwner() {
+            ownerCount++;  // Increment owner count
+            const contactFieldsContainer = document.getElementById('contact-fields');
+
+            const newContactGroup = document.createElement('div');
+            newContactGroup.classList.add('contact-group');
+            newContactGroup.innerHTML = `
+                <div class="contact-card">
+                    <h3>Business Owner ${ownerCount}</h3>
+                    <div class="form-group">
+                        <label>Business Contact Name:</label>
+                        <input type="text" name="business_contact_name_${ownerCount - 1}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Business Owner ZID:</label>
+                        <input type="text" name="business_owner_zid_${ownerCount - 1}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Business Contact Email:</label>
+                        <input type="email" name="business_contact_email_${ownerCount - 1}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Business Contact Type:</label>
+                        <select name="business_contact_type_${ownerCount - 1}" required>
+                            <option value="Owner">Owner</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Valid From Date:</label>
+                        <input type="date" name="valid_from_date_${ownerCount - 1}" value="{{ today }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Valid To Date:</label>
+                        <input type="date" name="valid_to_date_${ownerCount - 1}" value="8999-12-31" required>
+                    </div>
+                </div>
+            `;
+
+            contactFieldsContainer.appendChild(newContactGroup);
+
+            // Update the hidden field with the current number of owners
+            document.getElementById('num_owners').value = ownerCount;
+        }
+
+        // Function to remove the last business owner field
+        function removeBusinessOwner() {
+            if (ownerCount > 0) {  // Ensure we don't remove all business owners
+                const contactFieldsContainer = document.getElementById('contact-fields');
+                contactFieldsContainer.removeChild(contactFieldsContainer.lastElementChild);  // Remove the last contact group
+                ownerCount--;  // Decrement the owner count
+                document.getElementById('num_owners').value = ownerCount;  // Update the hidden num_owners field
+            }
+        }
+
+        // Update progress bar to Step 3
+        updateProgressBar(3);
+    </script>
+{% endblock %}
