@@ -1,62 +1,169 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Product Information</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Product Information</h1>
-    <form method="post">
-        {{ form.hidden_tag() }}
-        <div>
-            <label>{{ form.product_name.label }}:</label>
-            {{ form.product_name(size=50) }}
-        </div>
-        <div>
-            <label>{{ form.version.label }}:</label>
-            {{ form.version(size=50) }}
-        </div>
-        <div>
-            <label>{{ form.launch_date.label }}:</label>
-            {{ form.launch_date() }}
-        </div>
-        <div>
-            <label>{{ form.retirement_date.label }}:</label>
-            {{ form.retirement_date() }}
-        </div>
-        <h2>Business Value (0-10 scale)</h2>
-        <div>
-            <label>{{ form.decision_making.label }}:</label>
-            {{ form.decision_making(size=50) }}
-        </div>
-        <div>
-            <label>{{ form.monetization.label }}:</label>
-            {{ form.monetization(size=50) }}
-        </div>
-        <div>
-            <label>{{ form.time_savings.label }}:</label>
-            {{ form.time_savings(size=50) }}
-        </div>
-        <div>
-            <label>{{ form.reporting.label }}:</label>
-            {{ form.reporting(size=50) }}
-        </div>
-        <div>
-            <label>{{ form.processes.label }}:</label>
-            {{ form.processes(size=50) }}
-        </div>
-        <div>
-            <label>{{ form.collaboration.label }}:</label>
-            {{ form.collaboration(size=50) }}
-        </div>
-        <div>
-            <label>{{ form.documentation_audits.label }}:</label>
-            {{ form.documentation_audits(size=50) }}
-        </div>
-        <div>
-            <input type="submit" name="next" value="Next">
-        </div>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+        <h2>Product Information</h2>
+
+        <form method="post">
+            <!-- Product Information -->
+            <div class="form-group">
+                <label>Product Name:</label>
+                <input type="text" name="product_name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Version (Optional):</label>
+                <input type="text" name="version">
+            </div>
+
+            <div class="form-group">
+                <label>Launch Date:</label>
+                <input type="date" name="launch_date" value="{{ today }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Status:</label>
+                <select name="status">
+                    <option value="Active">Active</option>
+                    <option value="In development">In development</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Product Properties:</label>
+                <select name="product_properties" multiple>
+                    <option value="AI">AI</option>
+                    <option value="GUI">GUI</option>
+                    <option value="Personal Information">Personal Information</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Retirement Date:</label>
+                <input type="date" name="retirement_date" value="8999-12-31" required>
+            </div>
+
+            <div class="form-group">
+                <label>Description (Max 2500 words):</label>
+                <textarea name="description" maxlength="2500"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Risks (Optional) (Max 2500 words):</label>
+                <textarea name="risks" maxlength="2500"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Additional Properties (Optional) (Max 2500 words):</label>
+                <textarea name="additional_properties" maxlength="2500"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Product Documentation URL (Optional):</label>
+                <input type="url" name="documentation_url">
+            </div>
+
+            <div class="form-group">
+                <label>Repository URL (Optional):</label>
+                <input type="url" name="repository_url">
+            </div>
+
+            <div class="form-group">
+                <label>Metrics Dashboard (Optional):</label>
+                <input type="url" name="metrics_dashboard">
+            </div>
+
+            <!-- Business Value Section -->
+            <h3>Business Value</h3>
+
+            <div class="form-group">
+                <label>Decision Making (0-10):</label>
+                <input type="range" name="decision_making" min="0" max="10" value="0" onchange="updateSliderValue(this)">
+                <span>0</span>
+            </div>
+
+            <div class="form-group">
+                <label>Monetization (0-10):</label>
+                <input type="range" name="monetization" min="0" max="10" value="0" onchange="updateSliderValue(this)">
+                <span>0</span>
+            </div>
+
+            <div class="form-group">
+                <label>Time Savings (0-10):</label>
+                <input type="range" name="time_savings" min="0" max="10" value="0" onchange="updateSliderValue(this)">
+                <span>0</span>
+            </div>
+
+            <div class="form-group">
+                <label>Reporting (0-10):</label>
+                <input type="range" name="reporting" min="0" max="10" value="0" onchange="updateSliderValue(this)">
+                <span>0</span>
+            </div>
+
+            <div class="form-group">
+                <label>Processes (0-10):</label>
+                <input type="range" name="processes" min="0" max="10" value="0" onchange="updateSliderValue(this)">
+                <span>0</span>
+            </div>
+
+            <div class="form-group">
+                <label>Collaboration (0-10):</label>
+                <input type="range" name="collaboration" min="0" max="10" value="0" onchange="updateSliderValue(this)">
+                <span>0</span>
+            </div>
+
+            <div class="form-group">
+                <label>Documentation Audits (0-10):</label>
+                <input type="range" name="documentation_audits" min="0" max="10" value="0" onchange="updateSliderValue(this)">
+                <span>0</span>
+            </div>            
+
+            <!-- Product Owner Section -->
+            <h3>Product Owner Information</h3>
+            <div class="form-group">
+                <label>Product Owner Name:</label>
+                <input type="text" name="product_owner_name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Product Owner ZID:</label>
+                <input type="text" name="product_owner_zid" required>
+            </div>
+
+            <div class="form-group">
+                <label>Product Owner Email:</label>
+                <input type="email" name="product_owner_email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Product Owner Type:</label>
+                <select name="product_owner_type">
+                    <option value="Owner">Owner</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Valid From Date:</label>
+                <input type="date" name="valid_from_date" value="{{ today }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Valid To Date:</label>
+                <input type="date" name="valid_to_date" value="8999-12-31" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-actions">
+                <input type="submit" value="Save">
+            </div>
+        </form>
+        <script>
+            // Add slider functionality to update the display value
+            function updateSliderValue(slider) {
+                const value = slider.value;
+                slider.nextElementSibling.innerText = value;
+            }
+
+            // Update progress bar to Step 1
+            updateProgressBar(1);
+        </script>
+{% endblock %}
