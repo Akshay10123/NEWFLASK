@@ -1,24 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Platforms and Technologies</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>What platforms/technologies does the product use?</h1>
-    <form method="post">
-        <div>
-            <label for="platform_name">Platform Name:</label>
-            <input type="text" id="platform_name" name="platform_name">
-        </div>
-        <div>
-            <label for="platform_version">Platform Version:</label>
-            <input type="text" id="platform_version" name="platform_version">
-        </div>
-        <div>
-            <input type="submit" value="Next">
-        </div>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+    <script>
+        let dataSourceCount = 0;  // No data sources initially
+
+        // Function to add a new data source field
+        function addNewDataSource() {
+            dataSourceCount++;  // Increment data source count
+            const contactFieldsContainer = document.getElementById('contact-fields');
+
+            const newContactGroup = document.createElement('div');
+            newContactGroup.classList.add('contact-group');
+            newContactGroup.innerHTML = `
+                <div class="contact-card">
+                    <h3>Data Source ${dataSourceCount}</h3>
+                    <div class="form-group">
+                        <label>Dataset Name:</label>
+                        <input type="text" name="dataset_name_${dataSourceCount - 1}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Dataset Description:</label>
+                        <input type="text" name="dataset_description_${dataSourceCount - 1}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Dataset Type:</label>
+                        <select name="dataset_type_${dataSourceCount - 1}" required>
+                            <option value="Source">Source</option>
+                            <option value="Output">Output</option>
+                            <option value="Source and Output">Source and Output</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Valid From Date:</label>
+                        <input type="date" name="valid_from_date_${dataSourceCount - 1}" value="{{ today }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Valid To Date:</label>
+                        <input type="date" name="valid_to_date_${dataSourceCount - 1}" value="8999-12-31" required>
+                    </div>
+                </div>
+            `;
+
+            contactFieldsContainer.appendChild(newContactGroup);
+
+            // Update the hidden field with the current number of data sources
+            document.getElementById('num_data_sources').value = dataSourceCount;
+        }
+
+        // Function to remove the last data source field
+        function removeDataSource() {
+            if (dataSourceCount > 0) {  // Ensure we don't remove all data sources
+                const contactFieldsContainer = document.getElementById('contact-fields');
+                contactFieldsContainer.removeChild(contactFieldsContainer.lastElementChild);  // Remove the last contact group
+                dataSourceCount--;  // Decrement the data source count
+                document.getElementById('num_data_sources').value = dataSourceCount;  // Update the hidden num_data_sources field
+            }
+        }
+
+        // Update progress bar to Step 5
+        updateProgressBar(5);
+    </script>
+
+    <div class="container">
+        <h1>Additional Information - Data Sources</h1>
+        <h2>Other Data Sources/Outputs</h2>
+
+        <form method="post">
+            <!-- Message when no data sources are added -->
+            <div id="message">
+                <p>No data sources added. Click <strong>+</strong> to add a data source.</p>
+            </div>
+
+            <div id="contact-fields" class="contact-fields-container">
+                <!-- Initially, no fields are shown -->
+            </div>
+
+            <!-- Buttons to add/remove data sources -->
+            <div class="button-container">
+                <button type="button" onclick="addNewDataSource()">+</button> <!-- Add New Data Source -->
+                <button type="button" onclick="removeDataSource()">-</button> <!-- Remove Last Data Source -->
+            </div>
+
+            <!-- Hidden field to track the number of data sources -->
+            <input type="hidden" name="num_data_sources" id="num_data_sources" value="0">
+
+            <!-- Submit buttons for saving and skipping -->
+            <div class="form-actions">
+                <input type="submit" name="save" value="Save">
+                <input type="submit" name="skip" value="Skip">
+            </div>
+        </form>
+    </div>
+{% endblock %}
