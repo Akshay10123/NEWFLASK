@@ -1,11 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Product Owners Information</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Product Owners Information</h1>
+        <!-- No product owners initially, with a prompt message -->
+        <div id="message">
+            <p>No product owners added. Click <strong>+</strong> to add a product owner.</p>
+        </div>
+
+        <form method="post">
+            <div id="contact-fields" class="contact-fields-container">
+                <!-- Initially, no product owner fields shown -->
+            </div>
+
+            <!-- Buttons to add/remove product owners -->
+            <div class="button-container">
+                <button type="button" onclick="addNewProductOwner()">+</button> <!-- Add New Product Owner -->
+                <button type="button" onclick="removeProductOwner()">-</button> <!-- Remove Last Product Owner -->
+            </div>
+
+            <!-- Hidden field to track the number of product owners -->
+            <input type="hidden" name="num_owners" id="num_owners" value="0">
+
+            <!-- Submit buttons -->
+            <div class="form-actions">
+                <input type="submit" name="save" value="Save">
+                <input type="submit" name="skip" value="Skip">
+            </div>
+        </form>
+    </div>
     <script>
-        let ownerCount = 1;  // Start with 1 owner initially
+        let ownerCount = 0;  // No owners initially
 
         function addNewProductOwner() {
             ownerCount++;  // Increment owner count
@@ -14,65 +40,47 @@
             const newContactGroup = document.createElement('div');
             newContactGroup.classList.add('contact-group');
             newContactGroup.innerHTML = `
-                <h3>Contact ${ownerCount}</h3>
-                <div class="form-group">
-                    <label>Product Owner Name:</label>
-                    <input type="text" name="product_owner_name_${ownerCount - 1}" required>
-                </div>
-                <div class="form-group">
-                    <label>Product Owner ZID:</label>
-                    <input type="text" name="product_owner_zid_${ownerCount - 1}" required>
-                </div>
-                <div class="form-group">
-                    <label>Product Owner Email:</label>
-                    <input type="email" name="product_owner_email_${ownerCount - 1}" required>
-                </div>
-                <div class="form-group">
-                    <label>Product Owner Type:</label>
-                    <input type="text" name="product_owner_type_${ownerCount - 1}" required>
-                </div>
-                <div class="form-group">
-                    <label>Valid From Date:</label>
-                    <input type="date" name="valid_from_date_${ownerCount - 1}" required>
+                <div class="contact-card">
+                    <h3>Contact ${ownerCount}</h3>
+                    <div class="form-group">
+                        <label>Product Owner Name:</label>
+                        <input type="text" name="product_owner_name_${ownerCount - 1}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Owner ZID:</label>
+                        <input type="text" name="product_owner_zid_${ownerCount - 1}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Owner Email:</label>
+                        <input type="email" name="product_owner_email_${ownerCount - 1}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Owner Type:</label>
+                        <input type="text" name="product_owner_type_${ownerCount - 1}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Valid From Date:</label>
+                        <input type="date" name="valid_from_date_${ownerCount - 1}" required>
+                    </div>
                 </div>
             `;
 
             contactFieldsContainer.appendChild(newContactGroup);
+
+            // Update the hidden field with the current number of owners
+            document.getElementById('num_owners').value = ownerCount;
         }
+
+        function removeProductOwner() {
+            if (ownerCount > 0) {  // Ensure we don't remove all product owners
+                const contactFieldsContainer = document.getElementById('contact-fields');
+                contactFieldsContainer.removeChild(contactFieldsContainer.lastElementChild);  // Remove the last contact group
+                ownerCount--;  // Decrement the owner count
+                document.getElementById('num_owners').value = ownerCount;  // Update the hidden num_owners field
+            }
+        }
+
+        // Update progress bar to Step 2
+        updateProgressBar(2);
     </script>
-</head>
-<body>
-    <h1>Product Owners Information</h1>
-    <form method="post">
-        <div id="contact-fields">
-            <h3>Contact 1</h3>
-            <div class="form-group">
-                <label>Product Owner Name:</label>
-                <input type="text" name="product_owner_name_0" required>
-            </div>
-            <div class="form-group">
-                <label>Product Owner ZID:</label>
-                <input type="text" name="product_owner_zid_0" required>
-            </div>
-            <div class="form-group">
-                <label>Product Owner Email:</label>
-                <input type="email" name="product_owner_email_0" required>
-            </div>
-            <div class="form-group">
-                <label>Product Owner Type:</label>
-                <input type="text" name="product_owner_type_0" required>
-            </div>
-            <div class="form-group">
-                <label>Valid From Date:</label>
-                <input type="date" name="valid_from_date_0" required>
-            </div>
-        </div>
-        <button type="button" onclick="addNewProductOwner()">Add New Product Owner/Member</button>
-        <input type="hidden" name="num_owners" value="1">
-        <div>
-            <input type="submit" name="save" value="Save">
-            <input type="submit" name="skip" value="Skip">
-        </div>
-    </form>
-</body>
-</html>
+{% endblock %}
