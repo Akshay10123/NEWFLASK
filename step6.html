@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <script>
+        let platformCount = 0;  // No platforms initially
+
+        // Function to add a new platform field
+        function addNewPlatform() {
+            platformCount++;  // Increment platform count
+            const contactFieldsContainer = document.getElementById('contact-fields');
+
+            const newContactGroup = document.createElement('div');
+            newContactGroup.classList.add('contact-group');
+            newContactGroup.innerHTML = `
+                <div class="contact-card">
+                    <h3>Platform ${platformCount}</h3>
+                    <div class="form-group">
+                        <label>Platform Name:</label>
+                        <input type="text" name="platform_name_${platformCount - 1}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Platform Description:</label>
+                        <input type="text" name="platform_description_${platformCount - 1}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Valid From Date:</label>
+                        <input type="date" name="valid_from_date_${platformCount - 1}" value="{{ today }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Valid To Date:</label>
+                        <input type="date" name="valid_to_date_${platformCount - 1}" value="8999-12-31" required>
+                    </div>
+                </div>
+            `;
+
+            contactFieldsContainer.appendChild(newContactGroup);
+
+            // Update the hidden field with the current number of platforms
+            document.getElementById('num_platforms').value = platformCount;
+        }
+
+        // Function to remove the last platform field
+        function removePlatform() {
+            if (platformCount > 0) {  // Ensure we don't remove all platforms
+                const contactFieldsContainer = document.getElementById('contact-fields');
+                contactFieldsContainer.removeChild(contactFieldsContainer.lastElementChild);  // Remove the last contact group
+                platformCount--;  // Decrement the platform count
+                document.getElementById('num_platforms').value = platformCount;  // Update the hidden num_platforms field
+            }
+        }
+
+        // Update progress bar to Step 6
+        updateProgressBar(6);
+    </script>
+
+    <div class="container">
+        <h1>Platforms</h1>
+        <form method="post">
+            <!-- Message when no platforms are added -->
+            <div id="message">
+                <p>No platforms added. Click <strong>+</strong> to add a platform.</p>
+            </div>
+
+            <div id="contact-fields" class="contact-fields-container">
+                <!-- Initially, no fields are shown -->
+            </div>
+
+            <!-- Buttons to add/remove platforms -->
+            <div class="button-container">
+                <button type="button" onclick="addNewPlatform()">+</button> <!-- Add New Platform -->
+                <button type="button" onclick="removePlatform()">-</button> <!-- Remove Last Platform -->
+            </div>
+
+            <!-- Hidden field to track the number of platforms -->
+            <input type="hidden" name="num_platforms" id="num_platforms" value="0">
+
+            <!-- Submit buttons for saving and skipping -->
+            <div class="form-actions">
+                <input type="submit" name="save" value="Save">
+                <input type="submit" name="skip" value="Skip">
+            </div>
+        </form>
+    </div>
+{% endblock %}
