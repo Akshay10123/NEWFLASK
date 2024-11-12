@@ -2,55 +2,123 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Review Your Information</title>
+    <title>Review - All Information</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Review Your Information</h1>
+    <div class="container">
+        <h1>Review All Information</h1>
+        <p>Please review all the details you have provided. If everything looks good, you can submit. If you need to make changes, go back to the respective step.</p>
+        
+         <!-- Product Information -->
+         <h2>Product Information</h2>
+         <ul>
+             <li><strong>Product Name:</strong> {{ data.get('product_name') }}</li>
+             <li><strong>Version:</strong> {{ data.get('version') }}</li>
+             <li><strong>Launch Date:</strong> {{ data.get('launch_date') }}</li>
+             <li><strong>Status:</strong> {{ data.get('status') }}</li>
+             <li><strong>Product Properties:</strong> {{ ', '.join(data.get('product_properties', [])) }}</li>
+             <li><strong>Retirement Date:</strong> {{ data.get('retirement_date') }}</li>
+             <li><strong>Description:</strong> {{ data.get('description') }}</li>
+             <li><strong>Risks:</strong> {{ data.get('risks') }}</li>
+             <li><strong>Additional Properties:</strong> {{ data.get('additional_properties') }}</li>
+             <li><strong>Product Documentation URL:</strong> <a href="{{ data.get('documentation_url') }}">{{ data.get('documentation_url') }}</a></li>
+             <li><strong>Repository URL:</strong> <a href="{{ data.get('repository_url') }}">{{ data.get('repository_url') }}</a></li>
+             <li><strong>Metrics Dashboard:</strong> <a href="{{ data.get('metrics_dashboard') }}">{{ data.get('metrics_dashboard') }}</a></li>
+         </ul>
+ 
+         <!-- Business Value -->
+         <h2>Business Value</h2>
+         <ul>
+             <li><strong>Decision Making:</strong> {{ data.get('decision_making') }}</li>
+             <li><strong>Monetization:</strong> {{ data.get('monetization') }}</li>
+             <li><strong>Time Savings:</strong> {{ data.get('time_savings') }}</li>
+             <li><strong>Reporting:</strong> {{ data.get('reporting') }}</li>
+             <li><strong>Processes:</strong> {{ data.get('processes') }}</li>
+             <li><strong>Collaboration:</strong> {{ data.get('collaboration') }}</li>
+             <li><strong>Documentation Audits:</strong> {{ data.get('documentation_audits') }}</li>
+         </ul>
+         
+ 
+         <!-- Product Owner Information -->
+         <h2>Product Owner Information</h2>
+         <ul>
+             <li><strong>Product Owner Name:</strong> {{ data.get('product_owner_name') }}</li>
+             <li><strong>Product Owner ZID:</strong> {{ data.get('product_owner_zid') }}</li>
+             <li><strong>Product Owner Email:</strong> {{ data.get('product_owner_email') }}</li>
+             <li><strong>Product Owner Type:</strong> {{ data.get('product_owner_type') }}</li>
+             <li><strong>Valid From Date:</strong> {{ data.get('valid_from_date') }}</li>
+             <li><strong>Valid To Date:</strong> {{ data.get('valid_to_date') }}</li>
+         </ul>
 
-    <h2>Product Information</h2>
-    <ul>
-        <li><strong>Product Name:</strong> {{ data['product_name'] }}</li>
-        <li><strong>Version:</strong> {{ data['version'] }}</li>
-        <li><strong>Launch Date:</strong> {{ data['launch_date'] }}</li>
-        <li><strong>Retirement Date:</strong> {{ data['retirement_date'] }}</li>
-        <li><strong>Decision Making:</strong> {{ data['decision_making'] }}</li>
-        <li><strong>Monetization:</strong> {{ data['monetization'] }}</li>
-        <li><strong>Time Savings:</strong> {{ data['time_savings'] }}</li>
-        <li><strong>Reporting:</strong> {{ data['reporting'] }}</li>
-        <li><strong>Processes:</strong> {{ data['processes'] }}</li>
-        <li><strong>Collaboration:</strong> {{ data['collaboration'] }}</li>
-        <li><strong>Documentation Audits:</strong> {{ data['documentation_audits'] }}</li>
-    </ul>
 
-    <h2>Product Owner(s) Information</h2>
-    <ul>
-        {% for owner in data['product_owners'] %}
-            <li>
-                <strong>Product Owner Name:</strong> {{ owner.name }} <br>
-                <strong>ZID:</strong> {{ owner.zid }} <br>
-                <strong>Email:</strong> {{ owner.email }} <br>
-                <strong>Type:</strong> {{ owner.type }} <br>
-                <strong>Valid From Date:</strong> {{ owner.valid_from }}
-            </li>
-            <hr>
+        <!-- Step 2: Product Owner Information (Correct Session Key for Step 2) -->
+        <h2>Additional Product Owner/Member Information</h2>
+        {% for owner in data.get('product_owners', []) %}
+            <ul>
+                <li><strong>Product Owner Name:</strong> {{ owner.get('name') }}</li>
+                <li><strong>Product Owner ZID:</strong> {{ owner.get('zid') }}</li>
+                <li><strong>Product Owner Email:</strong> {{ owner.get('email') }}</li>
+                <li><strong>Product Owner Type:</strong> {{ owner.get('type') }}</li>
+                <li><strong>Valid From Date:</strong> {{ owner.get('valid_from') }}</li>
+            </ul>
         {% endfor %}
-    </ul>
 
-    <h2>Nucleus Data</h2>
-    <ul>{{ 'Has data' if data.get('nucleus_data') else 'No data' }}</ul>
-    
-    <h2>Other Data</h2>
-    <ul>{{ 'Has data' if data.get('other_data') else 'No data' }}</ul>
-    
-    <h2>Platform Information</h2>
-    <ul>Name: {{ data.get('platform_name', 'N/A') }}
-        Version: {{ data.get('platform_version', 'N/A') }}
-    </ul>
+        <!-- Business Owner Information -->
+        <h2>Business Owner Information</h2>
+        {% for owner in data.get('business_owners', []) %}
+            <ul>
+                <li><strong>Business Contact Name:</strong> {{ owner.get('name') }}</li>
+                <li><strong>Business Owner ZID:</strong> {{ owner.get('zid') }}</li>
+                <li><strong>Business Contact Email:</strong> {{ owner.get('email') }}</li>
+                <li><strong>Business Contact Type:</strong> {{ owner.get('type') }}</li>
+                <li><strong>Valid From Date:</strong> {{ owner.get('valid_from') }}</li>
+                <li><strong>Valid To Date:</strong> {{ owner.get('valid_to') }}</li>
+            </ul>
+        {% endfor %}
 
-    <div>
-        <input type="button" value="Edit" onclick="window.history.back();">
-        <input type="submit" value="Submit All Data" onclick="submitData();">
+        <!-- Snowflake Data Sources -->
+        <h2>Snowflake Data Sources</h2>
+        {% for source in data.get('data_sources', []) %}
+            <ul>
+                <li><strong>Database Name:</strong> {{ source.get('database') }}</li>
+                <li><strong>Schema Name:</strong> {{ source.get('schema') }}</li>
+                <li><strong>Table Name:</strong> {{ source.get('table') }}</li>
+                <li><strong>Snowflake Data Type:</strong> {{ source.get('type') }}</li>
+                <li><strong>Valid From Date:</strong> {{ source.get('valid_from') }}</li>
+                <li><strong>Valid To Date:</strong> {{ source.get('valid_to') }}</li>
+            </ul>
+        {% endfor %}
+
+        <!-- Platforms -->
+        <h2>Platforms</h2>
+        {% for platform in data.get('platforms', []) %}
+            <ul>
+                <li><strong>Platform Name:</strong> {{ platform.get('name') }}</li>
+                <li><strong>Platform Description:</strong> {{ platform.get('description') }}</li>
+                <li><strong>Valid From Date:</strong> {{ platform.get('valid_from') }}</li>
+                <li><strong>Valid To Date:</strong> {{ platform.get('valid_to') }}</li>
+            </ul>
+        {% endfor %}
+
+        <!-- Other Data Sources/Outputs -->
+        <h2>Other Data Sources/Outputs</h2>
+        {% for other_source in data.get('other_data_sources', []) %}
+            <ul>
+                <li><strong>Dataset Name:</strong> {{ other_source.get('name') }}</li>
+                <li><strong>Dataset Description:</strong> {{ other_source.get('description') }}</li>
+                <li><strong>Dataset Type:</strong> {{ other_source.get('type') }}</li>
+                <li><strong>Valid From Date:</strong> {{ other_source.get('valid_from') }}</li>
+                <li><strong>Valid To Date:</strong> {{ other_source.get('valid_to') }}</li>
+            </ul>
+        {% endfor %}
+
+        <!-- Final Submit -->
+        <div class="form-actions">
+            <form method="post" action="{{ url_for('submit_final') }}">
+                <input type="submit" value="Submit All Data">
+            </form>
+        </div>
     </div>
 </body>
 </html>
